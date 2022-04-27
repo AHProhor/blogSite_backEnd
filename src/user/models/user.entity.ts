@@ -9,9 +9,9 @@ export class UserEntity {
   name: string;
 
   @Column({ unique: true })
-  userName: string;
+  userName: string; 
 
-  @Column({ unique: true })
+  @Column({ unique: true})
   email: string;
 
   @Column()

@@ -52,7 +52,7 @@ export class UserController {
   index( @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
   @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,): Observable<Pagination<User>> {
     limit = limit > 100 ? 100 : limit;
-    return this.userService.paginate({page, limit, route: 'http://localhost:3000/users'});
+    return this.userService.paginate({page: Number(page), limit: Number(limit), route: 'http://localhost:3000/users'});
   }
 
   //   Delete one user request

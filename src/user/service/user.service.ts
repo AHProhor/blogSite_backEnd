@@ -23,6 +23,7 @@ export class UserService {
         newUser.userName = user.userName;
         newUser.email = user.email;
         newUser.password = passwordHash;
+        newUser.role=user.role
 
         return from(this.userRepository.save(newUser)).pipe(
           map((user: User) => {
@@ -40,7 +41,7 @@ export class UserService {
     return from(this.userRepository.find()).pipe(
     
       map((users: User[]) => {
-        console.log(users)
+       
         users.forEach(function (v) {
           delete v.password;
         });
@@ -52,7 +53,7 @@ export class UserService {
   //   find a single user
 
   findOne(id: number): Observable<User> {
-    return from(this.userRepository.findOne({ id })).pipe(
+    return from(this.userRepository.findOne({id})).pipe(
       map((user: User) => {
         const { password, ...result } = user; 
         return result;
@@ -73,6 +74,10 @@ export class UserService {
     return from(this.userRepository.update(id, user));
   }
 
+  // Update User Role
+  updateRoleOfUser(id: number, user:User): Observable<any>{
+    return from(this.userRepository.update(id, user));
+  }
   login(user: User): Observable<string> {
     return this.validatedUser(user.email, user.password).pipe(
       switchMap((user: User) => {

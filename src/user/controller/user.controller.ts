@@ -12,18 +12,14 @@ import { catchError, map, Observable, of } from 'rxjs';
 import { hasRoles } from 'src/auth/decorator/roles.decorator';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-guard';
 import { RolesGuard } from 'src/auth/guards/roles.guard';
-import { User } from '../models/user.interface';
+import { User, UserRole } from '../models/user.interface';
 import { UserService } from '../service/user.service';
 
 @Controller('users')
 export class UserController {
   constructor(private userService: UserService) {}
 
-  // admin
- @hasRoles('Admin')
- @UseGuards(JwtAuthGuard, RolesGuard)
- 
- 
+  
   // user post request
   @Post()
   create(@Body() user: User): Observable<User | object> {
@@ -42,14 +38,11 @@ export class UserController {
     )
   }
 
-  
   //  get one user request
   @Get(':id')
   findOne(@Param() params): Observable<User> {
     return this.userService.findOne(params.id);
   }
-  // @hasRoles('Admin')
-  // @UseGuards(JwtAuthGuard, RolesGuard)
   // get all user request
   @Get()
   findAll(): Observable<User[]> {
@@ -67,4 +60,12 @@ export class UserController {
   updateOne(@Param('id') id: string, @Body() user: User): Observable<any> {
     return this.userService.updateOne(Number(id), user);
   }
+
+  @hasRoles(UserRole.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Put(':id/role')
+  updateRoleOfUser(@Param('id') id:string, @Body()user:User) : Observable<User>{
+    return this.userService.updateRoleOfUser(Number(id), user);
+  }
+
 }
